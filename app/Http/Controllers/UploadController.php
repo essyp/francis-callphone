@@ -11,18 +11,18 @@ use App\Models\Upload;
 
 class UploadController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
 
     public function upload(Request $request)
     {
-        $user = auth('api')->setToken($request->bearerToken())->user();
-
-        if (!$user) {
+        if (!Auth::user()) {
             return response()->json(['status' => 'error', 'message' => 'user not found!'], 400);
         }
+        
+        $user = auth('api')->setToken($request->bearerToken())->user();
         
         $validateData = Validator::make($request->all(), [
             'image' => 'required|mimes:png,jpg,jpeg|max:2048',

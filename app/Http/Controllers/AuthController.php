@@ -12,9 +12,14 @@ use App\Models\Upload;
 class AuthController extends Controller
 {
 
-    public function __construct()
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api', ['except' => ['login','register']]);
+    // }
+    
+    public function loginPage()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        return view('login');
     }
 
     public function login(Request $request)
@@ -106,9 +111,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $user = auth('api')->setToken($request->bearerToken())->user();
-
-        if ($user == NULL) {
+        if (!Auth::user()) {
             return response()->json(['status' => 'error', 'message' => 'user not found!'], 400);
         }
         Auth::logout();
@@ -120,9 +123,7 @@ class AuthController extends Controller
 
     public function refresh(Request $request)
     {
-        $user = auth('api')->setToken($request->bearerToken())->user();
-
-        if ($user == NULL) {
+        if (!Auth::user()) {
             return response()->json(['status' => 'error', 'message' => 'user not found!'], 400);
         }
         
